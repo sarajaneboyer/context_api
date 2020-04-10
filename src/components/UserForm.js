@@ -1,10 +1,26 @@
 import React, { Component, } from 'react';
 import { Form, } from 'semantic-ui-react';
+import { UserConsumer, } from '../providers/UserProvider';
+// importing our consumer so we can fill the form with the current users data and update it
 
-export default class UserForm extends Component {
-  state = { username: '', statusLevel: '', email: '', firstName: '', lastName: '', };
+class UserForm extends Component {
+  state = { 
+    username: this.props.username, 
+    statusLevel: this.props.statusLevel, 
+    email: this.props.email, 
+    firstName: this.props.firstName, 
+    lastName: this.props.lastName, 
+  };
+
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value, });
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const account = { ...this.state, };
+    this.props.updateAccount(account);
+  };
+
 
   render(){
     const { username, statusLevel, email, firstName, lastName, } = this.state;
@@ -51,7 +67,6 @@ export default class UserForm extends Component {
   }
 }
 
-
 const statusOptions = [
   { key: "b", text: "Beginner", value: "Beginner", },
   { key: "n", text: "Novice", value: "Novice", },
@@ -59,3 +74,23 @@ const statusOptions = [
   { key: "s", text: "Skilled", value: "Skilled", },
   { key: "ex", text: "Expert", value: "Expert", },
 ];
+
+const ConnectedUserForm = (props) => {
+  return (
+    <UserConsumer>
+      { value => (
+        <UserForm
+          { ...props }
+          username={value.username}
+          statusLevel={value.statusLevel}
+          email={value.email}
+          firstName={value.firstName}
+          lastName={value.lastName}
+          updateAccount={value.updateAccount}
+        />
+      )}
+    </UserConsumer>
+  )
+}
+
+export default ConnectedUserForm;

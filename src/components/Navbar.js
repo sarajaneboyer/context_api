@@ -3,6 +3,8 @@ import { NavLink, } from 'react-router-dom';
 import { Menu, } from 'semantic-ui-react';
 import { UserConsumer, } from '../providers/UserProvider';
 
+
+// we import our consumer component and then wrap our return in it so we can access that context in our navbar
 const Navbar = () => (
   <UserConsumer>
     { value => (
